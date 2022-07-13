@@ -19,4 +19,4 @@ services:
         ports:
             # - 50055:50055 # node:container
             - 8080:8080 # node:container
-
+            - 1443:1443
