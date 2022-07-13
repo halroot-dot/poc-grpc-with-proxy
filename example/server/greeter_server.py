@@ -24,10 +24,12 @@ import helloworld_pb2_grpc
 class Greeter(helloworld_pb2_grpc.GreeterServicer):
 
     def SayHello(self, request, context):
+        print("request.name:", request.name)
         return helloworld_pb2.HelloReply(message='Hello, %s!' % request.name)
 
 
 def serve():
+    print("server start!")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
     server.add_insecure_port('[::]:50051')
