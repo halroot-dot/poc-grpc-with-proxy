@@ -22,23 +22,23 @@ import helloworld_pb2
 import helloworld_pb2_grpc
 
 
-# def run():
-#     # NOTE(gRPC Python Team): .close() is possible on a channel and should be
-#     # used in circumstances in which the with statement does not fit the needs
-#     # of the code.
-#     with grpc.insecure_channel('localhost:8080') as channel:
-#         stub = helloworld_pb2_grpc.GreeterStub(channel)
-#         response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
-#     print("Greeter client received: " + response.message)
-
 def run():
-    root = open("../ssl/root.crt", "rb").read()
-    channel_credential = grpc.ssl_channel_credentials(root_certificates=root)
-
-    with grpc.secure_channel('localhost:1443', channel_credential) as channel:
+    # NOTE(gRPC Python Team): .close() is possible on a channel and should be
+    # used in circumstances in which the with statement does not fit the needs
+    # of the code.
+    with grpc.insecure_channel('localhost:8080') as channel:
         stub = helloworld_pb2_grpc.GreeterStub(channel)
         response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
     print("Greeter client received: " + response.message)
+
+# def run():
+#     root = open("../ssl/root.crt", "rb").read()
+#     channel_credential = grpc.ssl_channel_credentials(root_certificates=root)
+
+#     with grpc.secure_channel('localhost:1443', channel_credential) as channel:
+#         stub = helloworld_pb2_grpc.GreeterStub(channel)
+#         response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
+#     print("Greeter client received: " + response.message)
 
 
 if __name__ == '__main__':
