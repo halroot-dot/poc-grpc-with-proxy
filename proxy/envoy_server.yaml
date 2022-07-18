@@ -47,9 +47,9 @@ static_resources:
                         common_tls_context:
                             tls_certificates:
                                 - certificate_chain:
-                                      filename: proxy/server.crt
+                                      filename: ssl/cert.pem
                                   private_key:
-                                      filename: proxy/server.key
+                                      filename: ssl/privatekey.pem
 
     clusters:
         - name: service_grpc
@@ -65,16 +65,16 @@ static_resources:
                                   socket_address:
                                       address: 127.0.0.1
                                       port_value: 50052
-          common_lb_config:
-              healthy_panic_threshold:
-                  value: 50.0
-          health_checks:
-              - timeout: 1s
-                interval: 5s
-                interval_jitter: 1s
-                no_traffic_interval: 5s
-                unhealthy_threshold: 1
-                healthy_threshold: 3
-                grpc_health_check:
-                    service_name: 'echo.EchoServer'
-                    authority: 'server.domain.com'
+          # common_lb_config:
+          #     healthy_panic_threshold:
+          #         value: 50.0
+          # health_checks:
+          #     - timeout: 1s
+          #       interval: 5s
+          #       interval_jitter: 1s
+          #       no_traffic_interval: 5s
+          #       unhealthy_threshold: 1
+          #       healthy_threshold: 3
+          #       grpc_health_check:
+          #           service_name: 'echo.EchoServer'
+          #           authority: 'server.domain.com'
