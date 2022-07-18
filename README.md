@@ -1,113 +1,51 @@
 # poc-grpc-with-proxy
 
-grpc に proxy を利用した構成の実現方法調査
+grpc に TLS proxy を利用した構成の実現方法調査
 
-### Step 1
-
-```mermaid
-graph LR
-  client["client"]
-  server["server"]
-
-  subgraph PC
-    client -- localhost:50051--> server
-  end
-```
-
-#### server
-
-1. change host address to `localhost:50051` in `greeter_server.py`
-
-2. launch
-
-```console
-cd example/server
-python greeter_server.py
-```
-
-#### client
-
-1. change host address to `localhost:50051` in `greeter_client.py`
-
-2. launch
-
-```console
-cd example/client
-python greeter_client.py
-```
-
-### Step 2
+### 構成
 
 ```mermaid
 graph LR
   client["client"]
+  envoy1["envoy1"]
+  envoy2["envoy2"]
   server["server"]
 
   subgraph PC
-    client -- localhost:50051--> server
-    subgraph docker
-      server
-    end
+    client --no TLS:8080--> envoy1 --TLS:50051--> envoy2 --no TLS:50052-->server
   end
 ```
 
-#### server
+#### Usage
 
-1. change host address to `localhost:50051` in `greeter_server.py`
-
-2. launch
+get envoy binary
 
 ```console
-cd example
-docker compose up
+docker cp `docker create envoyproxy/envoy-dev:latest`:/usr/local/bin/envoy .
 ```
 
-#### client
-
-1. change host address to `localhost:50051` in `greeter_client.py`
-
-2. launch
+1. Start gRPC Server
 
 ```console
-cd example/client
-python greeter_client.py
+python server/greeter_server.py
 ```
 
-### Step 3
-
-```mermaid
-graph LR
-  client["client"]
-  nginx["nginx"]
-  server["server"]
-
-  subgraph PC
-    client -- localhost:8080--> nginx
-
-    subgraph docker-compose
-      nginx -- server ip address:50051 --> server
-    end
-  end
-```
-
-1. change host address to `localhost:50051` in `greeter_server.py`
-
-2. launch
+2. Start Envoy Server Proxy
 
 ```console
-cd example
-docker compose up
+./envoy -c proxy/envoy_server.yaml --base-id 0 -l debug
 ```
 
-#### client
-
-1. change host address to `localhost:8080` in `greeter_client.py`
-
-2. launch
+3. Start Envoy Client Proxy
 
 ```console
-cd example/client
-python greeter_client.py
+./envoy  -c proxy/envoy_client.yaml --base-id 1 -l debug
+```
+
+4. Start gRPC Client
+
+```console
+python client/greeter_client.py
 ```
 
 ## WIP
