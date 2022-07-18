@@ -35,7 +35,7 @@ def run():
 #     root = open("../ssl/root.crt", "rb").read()
 #     channel_credential = grpc.ssl_channel_credentials(root_certificates=root)
 
-#     with grpc.secure_channel('localhost:1443', channel_credential) as channel:
+#     with grpc.secure_channel('localhost:443', channel_credential) as channel:
 #         stub = helloworld_pb2_grpc.GreeterStub(channel)
 #         response = stub.SayHello(helloworld_pb2.HelloRequest(name='you'))
 #     print("Greeter client received: " + response.message)

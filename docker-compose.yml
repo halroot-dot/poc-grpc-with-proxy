@@ -20,7 +20,8 @@ services:
             - ENVOY_UID=1000
             - ENVOY_GID=1000
         ports:
-            - 8080:8080
+            # - 8080:8080
+            - 443:443
         volumes:
             - type: bind
               source: ./ssl
