@@ -16,13 +16,25 @@ graph LR
   end
 ```
 
-#### Usage
+### Prepare
 
-get envoy binary
+#### get envoy binary
 
 ```console
 docker cp `docker create envoyproxy/envoy-dev:latest`:/usr/local/bin/envoy .
 ```
+
+#### 自己証明書作成
+
+```console
+$ cd ssl
+# 秘密鍵と公開鍵を作成
+$ openssl req -x509 -nodes -newkey rsa:2048 -days 365 -keyout privatekey.pem -out cert.pem -subj "/CN=127.0.0.1"
+# 公開鍵でroot証明書を作る
+$ openssl x509 -in cert.pem -out root.crt
+```
+
+#### Usage
 
 1. Start gRPC Server
 
