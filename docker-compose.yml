@@ -1,0 +1,29 @@
+version: '3'
+# request:50055 -> nginx:50055 (reverse-proxy) -> api:50051
+services:
+    server:
+        build:
+            context: . # root path definition for Dockerfile
+            dockerfile: 'server/Dockerfile'
+        ports:
+            - 50051:50051 # node:container
+        volumes:
+            - type: bind
+              source: ./ssl/
+              target: /app/../ssl/
+              read_only: true
+    proxy:
+        build:
+            context: ./proxy
+        container_name: envoy-grpc-proxy
+        environment:
+            - ENVOY_UID=1000
+            - ENVOY_GID=1000
+        ports:
+            # - 8080:8080
+            - 443:443
+        volumes:
+            - type: bind
+              source: ./ssl
+              target: /etc/envoy/certs
+              read_only: true

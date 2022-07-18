@@ -32,9 +32,24 @@ def serve():
     print("server start!")
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
-    server.add_insecure_port('[::]:50051')
+    server.add_insecure_port('[::]:50052')
     server.start()
     server.wait_for_termination()
+
+
+# def serve():
+#     print("server(ssl) start!")
+#     SERVER_CERTIFICATE_KEY = open("../ssl/localhost.key", "rb").read()
+#     SERVER_CERTIFICATE = open("../ssl/localhost.crt", "rb").read()
+
+#     server = grpc.server(futures.ThreadPoolExecutor(max_workers=2))
+#     helloworld_pb2_grpc.add_GreeterServicer_to_server(Greeter(), server)
+
+#     server_credentials = grpc.ssl_server_credentials([(SERVER_CERTIFICATE_KEY, SERVER_CERTIFICATE)])
+#     server.add_secure_port('localhost:50051', server_credentials)
+
+#     server.start()
+#     server.wait_for_termination()
 
 
 if __name__ == '__main__':
