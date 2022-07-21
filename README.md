@@ -28,6 +28,12 @@ graph LR
 ./make_cert.sh
 ```
 
+証明書中身を確認する
+
+```console
+openssl x509 -in ssl/client.crt -text -noout
+```
+
 ## Usage
 
 ```console
