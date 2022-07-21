@@ -1,0 +1,12 @@
+version: '3'
+services:
+    server-example:
+        build:
+            context: .
+            dockerfile: 'server/Dockerfile'
+    client-example:
+        build:
+            context: .
+            dockerfile: 'client/Dockerfile'
+        depends_on:
+            - server-example
