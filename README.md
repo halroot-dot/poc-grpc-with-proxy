@@ -28,13 +28,16 @@ docker cp `docker create envoyproxy/envoy-dev:latest`:/usr/local/bin/envoy .
 
 ```console
 cd ssl
+
 # 秘密鍵と公開鍵を作成
 openssl req -x509 -nodes -newkey rsa:2048 -days 365 -keyout privatekey.pem -out cert.pem -subj "/CN=127.0.0.1"
+
 # 公開鍵でroot証明書を作る
 openssl x509 -in cert.pem -out root.crt
 ```
 
 ## Usage
+### for Python
 
 1. Start gRPC Server
 
@@ -58,6 +61,39 @@ python server/greeter_server.py
 
 ```console
 python client/greeter_client.py
+```
+
+### for c++
+
+1. compile
+```console
+cd cpp/helloworld/cmake/build
+cmake -DCMAKE_PREFIX_PATH=$MY_INSTALL_DIR ../..
+make -j 4
+```
+
+2. Start gRPC Server
+
+```console
+./cpp/helloworld/cmake/build/greeter_server
+```
+
+2. Start Envoy Server Proxy
+
+```console
+./envoy -c proxy/envoy_server.yaml --base-id 0 -l debug
+```
+
+3. Start Envoy Client Proxy
+
+```console
+./envoy  -c proxy/envoy_client.yaml --base-id 1 -l debug
+```
+
+4. Start gRPC Client
+
+```console
+./cpp/helloworld/cmake/build/greeter_client
 ```
 
 ## その他
